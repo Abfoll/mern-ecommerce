@@ -4,7 +4,9 @@ import React from 'react'
 import { QRCodePng, appStorePng, googlePlayPng ,facebookPng,instagramPng,twitterPng,linkedinPng} from '../../assets'
 import SendIcon from '@mui/icons-material/Send';
 import { MotionConfig, motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'
+import { selectCategories } from '../categories/CategoriesSlice'
 
 
 
@@ -12,10 +14,16 @@ export const Footer = () => {
 
     const theme=useTheme()
     const is700=useMediaQuery(theme.breakpoints.down(700))
+    const categories=useSelector(selectCategories)
+    const navigate=useNavigate()
 
     const labelStyles={
         fontWeight:300,
         cursor:'pointer'
+    }
+
+    const handleCategoryClick=(categoryId)=>{
+        navigate('/',{state:{categoryFilter:categoryId}})
     }
 
   return (
@@ -34,7 +42,7 @@ export const Footer = () => {
                 <Stack rowGap={'1rem'} padding={'1rem'}>
                     <Typography variant='h6'>Support</Typography>
                     <Typography sx={labelStyles}>11th Main Street, Dhaka,  DH 1515, California.</Typography>
-                    <Typography sx={labelStyles}>exclusive@gmail.com</Typography>
+                    <Typography sx={labelStyles}>abenezerteketel7@gmail.com</Typography>
                     <Typography sx={labelStyles}>+88015-88888-9999</Typography>
                 </Stack>
 
@@ -45,6 +53,15 @@ export const Footer = () => {
                     <Typography sx={labelStyles}>Cart</Typography>
                     <Typography sx={labelStyles}>Wishlist</Typography>
                     <Typography sx={labelStyles}>Shop</Typography>
+                </Stack>
+
+                <Stack rowGap={'1rem'} padding={'1rem'}>
+                    <Typography  variant='h6'>Categories</Typography>
+                    {
+                        categories?.slice(0, 6).map((category)=>(
+                            <Typography key={category._id} onClick={()=>handleCategoryClick(category._id)} sx={{...labelStyles,'&:hover':{opacity:0.8}}}>{category.name}</Typography>
+                        ))
+                    }
                 </Stack>
 
                 <Stack rowGap={'1rem'} padding={'1rem'}>

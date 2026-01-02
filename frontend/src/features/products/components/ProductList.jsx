@@ -33,7 +33,7 @@ const sortOptions=[
 
 const bannerImages=[banner1,banner3,banner2,banner4]
 
-export const ProductList = () => {
+export const ProductList = ({categoryFromNavigation}) => {
     const [filters,setFilters]=useState({})
     const [page,setPage]=useState(1)
     const [sort,setSort]=useState(null)
@@ -63,6 +63,12 @@ export const ProductList = () => {
     const isProductFilterOpen=useSelector(selectProductIsFilterOpen)
 
     const dispatch=useDispatch()
+
+    useEffect(()=>{
+        if(categoryFromNavigation){
+            setFilters({category:[categoryFromNavigation]})
+        }
+    },[categoryFromNavigation])
 
     const handleBrandFilters=(e)=>{
 
@@ -201,11 +207,36 @@ export const ProductList = () => {
 
 
                     <Stack rowGap={2} mt={4} >
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Totes</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Backpacks</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Travel Bags</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Hip Bags</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Laptop Sleeves</Typography>
+                        {
+                            categories?.map((category)=>(
+                                <Typography 
+                                    key={category._id}
+                                    onClick={()=>{
+                                        const filterSet=new Set(filters.category || [])
+                                        if(filterSet.has(category._id)){
+                                            filterSet.delete(category._id)
+                                        } else {
+                                            filterSet.add(category._id)
+                                        }
+                                        const filterArray = Array.from(filterSet);
+                                        setFilters({...filters,category:filterArray})
+                                    }}
+                                    sx={{
+                                        cursor:"pointer",
+                                        padding:"0.5rem",
+                                        borderRadius:"4px",
+                                        backgroundColor:filters.category?.includes(category._id)?"#E7E5E4":"transparent",
+                                        transition:"all 0.3s ease",
+                                        '&:hover':{
+                                            backgroundColor:"#F5F5F5"
+                                        }
+                                    }} 
+                                    variant='body2'
+                                >
+                                    {category.name}
+                                </Typography>
+                            ))
+                        }
                     </Stack>
 
                     {/* brand filters */}
