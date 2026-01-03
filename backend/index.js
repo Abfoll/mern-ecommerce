@@ -5,11 +5,11 @@ const cors = require("cors");
 
 const server = express();
 
-// 1. Updated Middlewares with CORS fix
+// 1. Correct CORS Configuration
 server.use(express.json());
 server.use(cors({
     // Trust your specific Vercel frontend domain
-    origin: [process.env.ORIGIN, "https://mern-ecommerce-hhfw.vercel.app"], 
+    origin: ["https://mern-ecommerce-hhfw.vercel.app", "https://mern-ecommerce-ten-rho.vercel.app"], 
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
@@ -26,12 +26,12 @@ const connectToDB = async () => {
 };
 connectToDB();
 
-// 3. Routes
+// 3. Simple Test Route
 server.get("/", (req, res) => {
     res.status(200).json({ message: "running" });
 });
 
-// 4. Export for Vercel (Required)
+// 4. Export for Vercel
 module.exports = server;
 
 // 5. Local Development Only
